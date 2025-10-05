@@ -4,11 +4,16 @@ import { Button } from "./ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
+interface Spouse {
+  name: string;
+  generation?: string;
+}
+
 interface FamilyMember {
   id: string;
   name: string;
-  generation: string;
-  spouse?: string;
+  generation?: string;
+  spouse?: Spouse;
   information?: string;
   documents?: string[];
   children?: FamilyMember[];
@@ -17,14 +22,20 @@ interface FamilyMember {
 const foundingCouple: FamilyMember = {
   id: "Giuseppe Busateri",
   name: "Giuseppe Busateri",
-  generation: "1920s - 1950s",
-  spouse: "Founding Wife",
+  generation: "1880 - 1957",
+  spouse: {
+    name: "Ninfa 'Micelli' Busateri",
+    generation: "1882 - 1968",
+  },
   children: [
     { 
-      id: "child1", 
-      name: "Child 1", 
-      generation: "1950s - 1980s",
-      spouse: "Spouse 1",
+      id: "Theodore Salvatore Busateri", 
+      name: "Theodore Salvatore Busateri", 
+      generation: "1905 - 1992",
+      spouse: {
+        name: "Rose Marie 'Bruno' Busateri ",
+        generation: "1906 - 1998",
+      },      
       information: "Information about Child 1 will go here.",
       documents: ["Child 1 - Document 1", "Child 1 - Document 2"],
       children: [
@@ -34,10 +45,13 @@ const foundingCouple: FamilyMember = {
       ]
     },
     { 
-      id: "child2", 
-      name: "Child 2", 
-      generation: "1950s - 1980s",
-      spouse: "Spouse 2",
+      id: "Giuseppe Joseph Busateri Jr", 
+      name: "Giuseppe Joseph Busateri Jr", 
+      generation: "1907 - 1982",
+      spouse: {
+        name: "spuse",
+        generation: "1884 - 1962",
+      },
       information: "Information about Child 2 will go here.",
       documents: ["Child 2 - Document 1", "Child 2 - Document 2"],
       children: [
@@ -47,23 +61,20 @@ const foundingCouple: FamilyMember = {
       ]
     },
     { 
-      id: "child3", 
-      name: "Child 3", 
-      generation: "1950s - 1980s",
-      spouse: "Spouse 3",
+      id: "Biagio Busateri", 
+      name: "Biagio Busateri", 
+      generation: "1909 - 1914",
       information: "Information about Child 3 will go here.",
       documents: ["Child 3 - Document 1", "Child 3 - Document 2"],
-      children: [
-        { id: "gc3-1", name: "Grandchild 3-1", generation: "1980s - 2010s" },
-        { id: "gc3-2", name: "Grandchild 3-2", generation: "1980s - 2010s" },
-        { id: "gc3-3", name: "Grandchild 3-3", generation: "1980s - 2010s" },
-      ]
     },
     { 
-      id: "child4", 
-      name: "Child 4", 
-      generation: "1950s - 1980s",
-      spouse: "Spouse 4",
+      id: "Grace Marie Busateri", 
+      name: "Grace Marie Busateri", 
+      generation: "1911 - 1987",
+      spouse: {
+        name: "Emanuel William 'Garacci' Busateri",
+        generation: "1909 - 1993",
+      },
       information: "Information about Child 4 will go here.",
       documents: ["Child 4 - Document 1", "Child 4 - Document 2"],
       children: [
@@ -73,10 +84,13 @@ const foundingCouple: FamilyMember = {
       ]
     },
     { 
-      id: "child5", 
-      name: "Child 5", 
+      id: "Anthony Frank Busateri Sr", 
+      name: "Anthony Frank Busateri Sr", 
       generation: "1950s - 1980s",
-      spouse: "Spouse 5",
+      spouse: {
+        name: "spuse",
+        generation: "1884 - 1962",
+      },
       information: "Information about Child 5 will go here.",
       documents: ["Child 5 - Document 1", "Child 5 - Document 2"],
       children: [
@@ -86,10 +100,13 @@ const foundingCouple: FamilyMember = {
       ]
     },
     { 
-      id: "child6", 
-      name: "Child 6", 
-      generation: "1950s - 1980s",
-      spouse: "Spouse 6",
+      id: "Charles Ben Busateri", 
+      name: "Charles Ben Busateri", 
+      generation: "1915 - 2006",
+      spouse: {
+        name: "Bertha J 'Sikora' Busateri ",
+        generation: "1918 - 2011",
+      },
       information: "Information about Child 6 will go here.",
       documents: ["Child 6 - Document 1", "Child 6 - Document 2"],
       children: [
@@ -99,10 +116,13 @@ const foundingCouple: FamilyMember = {
       ]
     },
     { 
-      id: "child7", 
-      name: "Child 7", 
-      generation: "1950s - 1980s",
-      spouse: "Spouse 7",
+      id: "Frank Jowett Busateri", 
+      name: "Frank Jowett Busateri", 
+      generation: "1919 - 2001",
+      spouse: {
+        name: "Marie Otilla 'Wolfe' Busateri ",
+        generation: "1918 - 2005",
+      },
       information: "Information about Child 7 will go here.",
       documents: ["Child 7 - Document 1", "Child 7 - Document 2"],
       children: [
@@ -112,10 +132,13 @@ const foundingCouple: FamilyMember = {
       ]
     },
     { 
-      id: "child8", 
-      name: "Child 8", 
-      generation: "1950s - 1980s",
-      spouse: "Spouse 8",
+      id: "John Joseph Busater", 
+      name: "John Joseph Busater", 
+      generation: "1920 - 2009",
+      spouse: {
+        name: "Sophie 'Christy' Busateri",
+        generation: "1921 - 1999",
+      },
       information: "Information about Child 8 will go here.",
       documents: ["Child 8 - Document 1", "Child 8 - Document 2"],
       children: [
@@ -125,10 +148,13 @@ const foundingCouple: FamilyMember = {
       ]
     },
     { 
-      id: "child9", 
-      name: "Child 9", 
-      generation: "1950s - 1980s",
-      spouse: "Spouse 9",
+      id: "Theresa M Busateri", 
+      name: "Theresa M Busateri", 
+      generation: "1922 - 2002",
+      spouse: {
+        name: "spuse",
+        generation: "1884 - 1962",
+      },
       information: "Information about Child 9 will go here.",
       documents: ["Child 9 - Document 1", "Child 9 - Document 2"],
       children: [
@@ -138,10 +164,13 @@ const foundingCouple: FamilyMember = {
       ]
     },
     { 
-      id: "child10", 
-      name: "Child 10", 
-      generation: "1950s - 1980s",
-      spouse: "Spouse 10",
+      id: "Carl Manuel Busateri", 
+      name: "Carl Manuel Busateri", 
+      generation: "1924 - 1990",
+      spouse: {
+        name: "spuse",
+        generation: "1884 - 1962",
+      },
       information: "Information about Child 10 will go here.",
       documents: ["Child 10 - Document 1", "Child 10 - Document 2"],
       children: [
@@ -151,10 +180,13 @@ const foundingCouple: FamilyMember = {
       ]
     },
     { 
-      id: "child11", 
-      name: "Child 11", 
-      generation: "1950s - 1980s",
-      spouse: "Spouse 11",
+      id: "Thomas T Busateri", 
+      name: "Thomas T Busateri", 
+      generation: "1928 - 2003",
+      spouse: {
+        name: "Marion Ann 'Tuska' Busateri",
+        generation: "1930 - 2016",
+      },
       information: "Information about Child 11 will go here.",
       documents: ["Child 11 - Document 1", "Child 11 - Document 2"],
       children: [
@@ -199,8 +231,8 @@ const FamilyTree = () => {
               <Heart className="h-4 w-4 text-accent" />
               <div className={`${level === 0 ? 'bg-primary text-primary-foreground px-6 py-3' : level === 1 ? 'bg-secondary text-secondary-foreground px-4 py-2' : 'bg-muted text-muted-foreground px-3 py-2'} rounded-lg vintage-shadow text-center transition-smooth`}>
                 <Users className={`${level === 0 ? 'h-5 w-5' : 'h-4 w-4'} mx-auto mb-1`} />
-                <p className={`font-semibold ${level === 0 ? 'text-sm' : 'text-xs'}`}>{member.spouse}</p>
-                <p className="text-xs opacity-80">{member.generation}</p>
+                  <p className={`font-semibold ${level === 0 ? 'text-sm' : 'text-xs'}`}>{member.spouse.name}</p>
+                  <p className="text-xs opacity-80">{member.spouse.generation}</p>
               </div>
             </>
           )}
@@ -227,10 +259,10 @@ const FamilyTree = () => {
               Family Tree
             </h2>
             <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Tracing our roots and celebrating our branches
-            </p>
+            Click on family members to explore their descendants
+</p>
           </div>
-          <Button
+          {/* <Button
             onClick={() => setViewMode(viewMode === "interactive" ? "full" : "interactive")}
             variant="outline"
             size="sm"
@@ -238,13 +270,13 @@ const FamilyTree = () => {
           >
             <Maximize2 className="h-4 w-4" />
             {viewMode === "interactive" ? "View Full Tree" : "Interactive View"}
-          </Button>
+          </Button> */}
         </div>
 
         {viewMode === "interactive" ? (
           <>
             {/* Breadcrumb Navigation */}
-            <div className="flex items-center gap-2 mb-8 flex-wrap justify-center">
+            <div className="flex items-center gap-1 mb-8 flex-wrap justify-center">
               {breadcrumb.map((member, index) => (
                 <div key={member.id} className="flex items-center gap-2">
                   <button
@@ -274,8 +306,8 @@ const FamilyTree = () => {
                     <Heart className="h-6 w-6 text-accent animate-pulse" />
                     <div className="bg-primary text-primary-foreground px-6 py-4 rounded-lg vintage-shadow transition-smooth hover:scale-105">
                       <Users className="h-6 w-6 mx-auto mb-2" />
-                      <p className="font-bold">{selectedMember.spouse}</p>
-                      <p className="text-sm opacity-90">{selectedMember.generation}</p>
+                      <p className="font-bold">{selectedMember.spouse.name}</p>
+                      <p className="text-sm opacity-90">{selectedMember.spouse.generation}</p>
                     </div>
                   </>
                 )}
@@ -340,7 +372,6 @@ const FamilyTree = () => {
 
             <div className="mt-16 text-center">
               <p className="text-muted-foreground italic">
-                Click on family members to explore their descendants
               </p>
             </div>
           </>

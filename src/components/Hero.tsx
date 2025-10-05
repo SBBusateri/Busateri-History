@@ -14,10 +14,10 @@ const Hero = () => {
       
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
         <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 animate-fade-in">
-          Our Family Legacy
+          The Busateri Legacy
         </h1>
         <p className="text-xl md:text-2xl text-primary-foreground/90 mb-8 font-light animate-fade-in-delay">
-          Preserving memories, celebrating heritage, and honoring generations past
+          Preserving history, celebrating heritage, and honoring generations past
         </p>
       </div>
       
