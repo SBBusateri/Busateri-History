@@ -70,7 +70,7 @@ const buildFamilyTree = (data: FirestoreMember[]): FamilyMember | null => {
   });
 
   const founderEntries = data.filter(
-    (d) => !d.parent || d.parent.toLowerCase() === "founders"
+    (d) => !d.parent || d.parent.toLowerCase() === ""
   );
 
   const suppressed = new Set<string>();
@@ -80,7 +80,7 @@ const buildFamilyTree = (data: FirestoreMember[]): FamilyMember | null => {
       const spouseRaw = rawMap.get(spouseKey);
       if (
         spouseRaw &&
-        (!spouseRaw.parent || spouseRaw.parent.toLowerCase() === "founders")
+        (!spouseRaw.parent || spouseRaw.parent.toLowerCase() === "")
       ) {
         suppressed.add(spouseKey);
       }
@@ -107,7 +107,7 @@ const buildFamilyTree = (data: FirestoreMember[]): FamilyMember | null => {
   });
 
   data.forEach((d) => {
-    if (d.parent && d.parent.toLowerCase() !== "founders") {
+    if (d.parent && d.parent.toLowerCase() !== "") {
       const parentKey = normalizeName(d.parent);
       const childKey = normalizeName(d.name);
       if (suppressed.has(childKey)) return;
@@ -224,7 +224,7 @@ const FamilyTree = () => {
       spouse: showSpouse ? formData.spouse : "",
       spouse_birth: showSpouse ? formData.spouse_birth : "",
       spouse_death: showSpouse && !spouseAlive ? formData.spouse_death : "",
-      parent: formData.parent || "founders",
+      parent: formData.parent || "",
     };
 
     try {
@@ -419,7 +419,6 @@ const FamilyTree = () => {
                         {f.name}
                       </option>
                     ))}
-                    <option value="founders">Founders</option>
                   </select>
                 </div>
 
