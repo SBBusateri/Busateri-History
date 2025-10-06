@@ -15,7 +15,7 @@ const FoundingGeneration = () => {
   const [activeTab, setActiveTab] = useState("info");
 
   return (
-    <section className="py-20 px-4 bg-background">
+    <section id="founding-generation" className="py-20 px-4 bg-background">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 text-primary">
         The Busateri Family
@@ -32,22 +32,27 @@ const FoundingGeneration = () => {
               Documents
             </TabsTrigger>
           </TabsList>
-
           <TabsContent value="info" className="space-y-6">
-            <div className="bg-card p-8 rounded-lg vintage-shadow">
-              <h3 className="text-2xl font-bold mb-4 text-primary"></h3> 
+            <div className="bg-card p-8 rounded-lg vintage-shadow text-center">
+                  <div className="flex justify-center mb-8">
+                <img
+                  src={FamilyPic}
+                  alt="Giuseppe and Ninfa Busateri Family"
+                  className="rounded-xl shadow-md max-w-md w-full object-cover border border-border"
+                />
+              </div>
+              <h3 className="text-2xl font-bold mb-4 text-primary">
+              </h3>
               <div className="prose prose-lg max-w-none text-foreground">
                 <p className="mb-4 text-muted-foreground leading-relaxed">
-                Giuseppe (Joseph)  and Ninfa Pusateri’s journey began in Saint Agnes, Sicily today known as the seaside town of Sant’Agata di Militello, nestled along Sicily’s northern coast in the Metropolitan City of Messina. At the turn of the 20th, at only 20 years old, they looked toward America for a better life. Giuseppe (Joseph) left first in 1901 departing from Napoli aboard the S.S Washington.. After weeks aboard a crowded steamship landing in the port of New York, Ellis Island and destination marked as Milwaukee, Wisconsin after that.
+                Giuseppe (Joseph) and Ninfa Pusateri’s journey began in Saint Agnes, Sicily—today known as the seaside town of Sant’Agata di Militello, nestled along Sicily’s northern coast in the Metropolitan City of Messina. At the turn of the 20th century, and at only 20 years old, they looked toward America for a better life. Giuseppe (Joseph) left first in 1901, departing from Napoli aboard the S.S. Washington. After weeks aboard a crowded steamship, he arrived at the Port of New York through Ellis Island, with his destination listed as Milwaukee, Wisconsin.
                 </p>
                 
                 <p className="mb-4 text-muted-foreground leading-relaxed">
-                Ninfa followed soon after around 1905, braving the same ocean voyage to reunite with her husband. Together, they built their new life in Milwaukee—carrying with them their Sicilian faith, language, and traditions that would root the Busateri family’s story in America.
-                Giuseppe and Ninfa Busateri stayed in and around Milwaukee, Wisconsin having 15 children in 23 years.  Giuseppe (Joseph) worked in Wisconsin for the Transport Company for 44 years before retiring. Giuseppe (Joseph)  passed away in 1957 and Ninfa after in 1968.
+                Ninfa followed soon after, around 1905, braving the same ocean voyage to reunite with her husband. Together, they built a new life in Milwaukee—carrying with them their Sicilian faith, language, and traditions that would root the Busateri family’s story in America. Giuseppe and Ninfa remained in and around Milwaukee, raising 15 children over 23 years. Giuseppe (Joseph) worked for the Wisconsin Transport Company for 44 years before retiring. He passed away in 1957, followed by Ninfa in 1968.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                Giuseppe (Joseph) and Ninfa Pusateri’s last name can be seen changing to Busateri after arrival between 1910 - 1920. Giuseppe (Joseph) wrote Pusateri on the 1910 census while he wrote Busateri 1920.
-                See document section for source.
+                Their surname transitioned from Pusateri to Busateri sometime after their arrival, a change reflected in census records—Giuseppe (Joseph) signed “Pusateri” in 1910 and “Busateri” in 1920. (See document section for source references.)
                 </p>
               </div>
             </div>
