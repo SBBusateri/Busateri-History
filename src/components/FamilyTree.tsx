@@ -2,24 +2,11 @@ import { useEffect, useState } from "react";
 import { collection, getDocs, doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { Users, ChevronRight, Heart, Plus, CheckCircle2 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import { Textarea } from "./ui/textarea";
 
 interface Spouse {
   name: string;
@@ -32,7 +19,6 @@ interface FamilyMember {
   generation?: string;
   spouse?: Spouse;
   information?: string;
-  documents?: string[];
   children?: FamilyMember[];
 }
 
@@ -69,19 +55,14 @@ const buildFamilyTree = (data: FirestoreMember[]): FamilyMember | null => {
     });
   });
 
-  const founderEntries = data.filter(
-    (d) => !d.parent || d.parent.toLowerCase() === ""
-  );
+  const founderEntries = data.filter((d) => !d.parent || d.parent.toLowerCase() === "");
 
   const suppressed = new Set<string>();
   for (const f of founderEntries) {
     if (f.spouse) {
       const spouseKey = normalizeName(f.spouse);
       const spouseRaw = rawMap.get(spouseKey);
-      if (
-        spouseRaw &&
-        (!spouseRaw.parent || spouseRaw.parent.toLowerCase() === "")
-      ) {
+      if (spouseRaw && (!spouseRaw.parent || spouseRaw.parent.toLowerCase() === "")) {
         suppressed.add(spouseKey);
       }
     }
@@ -139,9 +120,7 @@ const buildFamilyTree = (data: FirestoreMember[]): FamilyMember | null => {
 
 const FamilyTree = () => {
   const [familyTree, setFamilyTree] = useState<FamilyMember | null>(null);
-  const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(
-    null
-  );
+  const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(null);
   const [breadcrumb, setBreadcrumb] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [familyList, setFamilyList] = useState<FirestoreMember[]>([]);
@@ -160,6 +139,7 @@ const FamilyTree = () => {
     spouse_birth: "",
     spouse_death: "",
     parent: "",
+    about: "",
   });
 
   useEffect(() => {
@@ -199,8 +179,9 @@ const FamilyTree = () => {
   }, []);
 
   const handleMemberClick = (member: FamilyMember) => {
-    setSelectedMember(member);
+    // Keep parent in breadcrumb so it stays visible
     setBreadcrumb((prev) => [...prev, member]);
+    setSelectedMember(member);
   };
 
   const handleBreadcrumbClick = (index: number) => {
@@ -209,9 +190,7 @@ const FamilyTree = () => {
     setSelectedMember(newBreadcrumb[newBreadcrumb.length - 1]);
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -225,13 +204,14 @@ const FamilyTree = () => {
       spouse_birth: showSpouse ? formData.spouse_birth : "",
       spouse_death: showSpouse && !spouseAlive ? formData.spouse_death : "",
       parent: formData.parent || "",
+      about: formData.about,
     };
 
     try {
       await setDoc(doc(db, "family_members", formData.name), newMember);
       setSuccessMessage(`${formData.name} successfully added!`);
       setTimeout(() => setSuccessMessage(""), 3000);
-      setDialogOpen(false); // Close popup
+      setDialogOpen(false);
 
       setFormData({
         name: "",
@@ -241,6 +221,7 @@ const FamilyTree = () => {
         spouse_birth: "",
         spouse_death: "",
         parent: "",
+        about: "",
       });
     } catch (err) {
       console.error("Error adding family member:", err);
@@ -271,7 +252,6 @@ const FamilyTree = () => {
           Click on family members to explore their descendants
         </p>
 
-        {/* Success banner */}
         {successMessage && (
           <div className="mb-4 bg-green-100 text-green-800 border border-green-300 px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition-all">
             <CheckCircle2 className="h-5 w-5 text-green-600" />
@@ -279,14 +259,11 @@ const FamilyTree = () => {
           </div>
         )}
 
-        {/* Breadcrumb Navigation */}
+        {/* Breadcrumb */}
         <div className="flex items-center gap-1 mb-8 flex-wrap justify-center">
           {breadcrumb.map((member, index) => (
             <div key={member.id} className="flex items-center gap-2">
-              <button
-                onClick={() => handleBreadcrumbClick(index)}
-                className="text-primary hover:underline font-medium"
-              >
+              <button onClick={() => handleBreadcrumbClick(index)} className="text-primary hover:underline font-medium">
                 {member.name}
               </button>
               {index < breadcrumb.length - 1 && (
@@ -299,6 +276,17 @@ const FamilyTree = () => {
         {/* Selected Member */}
         {selectedMember && (
           <div className="flex flex-col items-center space-y-8 animate-fade-in">
+            {/* Parents */}
+            {breadcrumb.length > 1 && (
+              <div className="flex items-center gap-4">
+                <Users className="h-5 w-5 text-muted-foreground" />
+                <p className="text-sm italic text-muted-foreground">
+                  Child of {breadcrumb[breadcrumb.length - 2].name}
+                </p>
+              </div>
+            )}
+
+            {/* Selected member */}
             <div className="flex items-center gap-6">
               <div className="bg-primary text-primary-foreground px-6 py-4 rounded-lg vintage-shadow">
                 <Users className="h-6 w-6 mx-auto mb-2" />
@@ -320,6 +308,14 @@ const FamilyTree = () => {
               )}
             </div>
 
+            {/* About section */}
+            {selectedMember.information && (
+              <div className="max-w-md text-center text-muted-foreground italic">
+                <p>“{selectedMember.information}”</p>
+              </div>
+            )}
+
+            {/* Children */}
             {selectedMember.children && selectedMember.children.length > 0 && (
               <>
                 <div className="w-0.5 h-12 bg-border" />
@@ -359,60 +355,34 @@ const FamilyTree = () => {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <p className="text-muted-foreground">
-                  Need to add any more family members? Fill out the form below
-                  and hit submit when done.
+                  Need to add any more family members? Fill out the form below and hit submit when done.
                 </p>
 
                 <div>
                   <Label>Full Name of Busateri</Label>
-                  <Input
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <Input name="name" value={formData.name} onChange={handleInputChange} required />
                 </div>
 
                 <div>
                   <Label>Birthdate (Month / Day / Year)</Label>
-                  <Input
-                    name="birth"
-                    placeholder="e.g. 1905"
-                    value={formData.birth}
-                    onChange={handleInputChange}
-                    required
-                  />
+                  <Input name="birth" placeholder="e.g. 1905" value={formData.birth} onChange={handleInputChange} required />
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={alive}
-                    onChange={() => setAlive(!alive)}
-                  />
+                  <input type="checkbox" checked={alive} onChange={() => setAlive(!alive)} />
                   <Label>Still alive?</Label>
                 </div>
 
                 {!alive && (
                   <div>
                     <Label>Deathdate (Month / Day / Year)</Label>
-                    <Input
-                      name="death"
-                      placeholder="e.g. 1992"
-                      value={formData.death}
-                      onChange={handleInputChange}
-                    />
+                    <Input name="death" placeholder="e.g. 1992" value={formData.death} onChange={handleInputChange} />
                   </div>
                 )}
 
                 <div>
                   <Label>Busateri Parent</Label>
-                  <select
-                    name="parent"
-                    value={formData.parent}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border rounded"
-                  >
+                  <select name="parent" value={formData.parent} onChange={handleInputChange} className="w-full p-2 border rounded">
                     <option value="">Select parent</option>
                     {familyList.map((f) => (
                       <option key={f.id} value={f.name}>
@@ -423,11 +393,7 @@ const FamilyTree = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={showSpouse}
-                    onChange={() => setShowSpouse(!showSpouse)}
-                  />
+                  <input type="checkbox" checked={showSpouse} onChange={() => setShowSpouse(!showSpouse)} />
                   <Label>Married?</Label>
                 </div>
 
@@ -435,45 +401,38 @@ const FamilyTree = () => {
                   <>
                     <div>
                       <Label>Spouse Full Name</Label>
-                      <Input
-                        name="spouse"
-                        value={formData.spouse}
-                        onChange={handleInputChange}
-                      />
+                      <Input name="spouse" value={formData.spouse} onChange={handleInputChange} />
                     </div>
 
                     <div>
                       <Label>Spouse Birthdate (Month / Day / Year)</Label>
-                      <Input
-                        name="spouse_birth"
-                        placeholder="e.g. 1907"
-                        value={formData.spouse_birth}
-                        onChange={handleInputChange}
-                      />
+                      <Input name="spouse_birth" placeholder="e.g. 1907" value={formData.spouse_birth} onChange={handleInputChange} />
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        checked={spouseAlive}
-                        onChange={() => setSpouseAlive(!spouseAlive)}
-                      />
+                      <input type="checkbox" checked={spouseAlive} onChange={() => setSpouseAlive(!spouseAlive)} />
                       <Label>Spouse Still alive?</Label>
                     </div>
 
                     {!spouseAlive && (
                       <div>
                         <Label>Spouse Deathdate (Month / Day / Year)</Label>
-                        <Input
-                          name="spouse_death"
-                          placeholder="e.g. 1982"
-                          value={formData.spouse_death}
-                          onChange={handleInputChange}
-                        />
+                        <Input name="spouse_death" placeholder="e.g. 1982" value={formData.spouse_death} onChange={handleInputChange} />
                       </div>
                     )}
                   </>
                 )}
+
+                <div>
+                  <Label>About Member (max 300 characters)</Label>
+                  <Textarea
+                    name="about"
+                    value={formData.about}
+                    onChange={handleInputChange}
+                    maxLength={300}
+                    placeholder="Write a short bio or memory..."
+                  />
+                </div>
 
                 <Button type="submit" className="w-full">
                   Submit
