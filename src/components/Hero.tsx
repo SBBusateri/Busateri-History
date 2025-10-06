@@ -1,5 +1,7 @@
 import heroImage from "@/assets/hero-family.jpg";
 import { ArrowDown } from "lucide-react";
+import SantAgata from '../assets/SantAgata.jpg';
+
 
 const Hero = () => {
 
@@ -7,8 +9,8 @@ const Hero = () => {
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
       <div 
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${heroImage})` }}
-      >
+        style={{ backgroundImage: `url(${SantAgata})` }}
+              >
         <div className="absolute inset-0" style={{ background: 'var(--hero-gradient)' }} />
       </div>
       

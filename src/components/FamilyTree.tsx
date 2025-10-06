@@ -132,8 +132,8 @@ const foundingCouple: FamilyMember = {
       ]
     },
     { 
-      id: "John Joseph Busater", 
-      name: "John Joseph Busater", 
+      id: "John Joseph Busateri", 
+      name: "John Joseph Busateri", 
       generation: "1920 - 2009",
       spouse: {
         name: "Sophie 'Christy' Busateri",

@@ -37,7 +37,7 @@ const FoundingGeneration = () => {
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                 Giuseppe and Ninfa Pusateri’s last name can be seen changing to Busateri after arrival between 1910 - 1920. Giuseppe wrote Pusateri on the 1910 census while he wrote Busateri 1920. 
-                See document section for sourse.
+                See document section for source.
                 </p>
               </div>
             </div>
