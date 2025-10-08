@@ -9,7 +9,6 @@ const Footer = () => {
         <div className="flex items-center justify-center gap-2 mb-4">
           <Heart className="h-5 w-5 fill-current" />
           <p className="text-lg font-semibold">
-            Family Heritage Archive
           </p>
         </div>
         <p className="text-primary-foreground/80 mb-2">
