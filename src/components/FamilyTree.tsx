@@ -37,6 +37,7 @@ interface FirestoreMember {
 const normalizeName = (name?: string) =>
   name ? name.trim().toLowerCase().replace(/\s+sr\.?$/i, "") : "";
 
+// build tree and sort children by birth year
 const buildFamilyTree = (data: FirestoreMember[]): FamilyMember | null => {
   if (!data || data.length === 0) return null;
 
@@ -57,6 +58,7 @@ const buildFamilyTree = (data: FirestoreMember[]): FamilyMember | null => {
 
   const founderEntries = data.filter((d) => !d.parent || d.parent.toLowerCase() === "");
 
+  // prevent double founders
   const suppressed = new Set<string>();
   for (const f of founderEntries) {
     if (f.spouse) {
@@ -68,6 +70,7 @@ const buildFamilyTree = (data: FirestoreMember[]): FamilyMember | null => {
     }
   }
 
+  // add spouse info
   data.forEach((d) => {
     const key = normalizeName(d.name);
     const member = membersMap.get(key);
@@ -80,13 +83,11 @@ const buildFamilyTree = (data: FirestoreMember[]): FamilyMember | null => {
         ? [spouseRaw.birth, spouseRaw.death].filter(Boolean).join(" - ")
         : [d.spouse_birth, d.spouse_death].filter(Boolean).join(" - ");
 
-      member.spouse = {
-        name: d.spouse,
-        generation: spouseGeneration || undefined,
-      };
+      member.spouse = { name: d.spouse, generation: spouseGeneration || undefined };
     }
   });
 
+  // link children
   data.forEach((d) => {
     if (d.parent && d.parent.toLowerCase() !== "") {
       const parentKey = normalizeName(d.parent);
@@ -100,6 +101,12 @@ const buildFamilyTree = (data: FirestoreMember[]): FamilyMember | null => {
         if (!parent.children.find((c) => normalizeName(c.name) === childKey)) {
           parent.children.push(child);
         }
+
+        // sort children by birth year
+        parent.children.sort((a, b) => {
+          const getYear = (gen?: string) => parseInt(gen?.split(" - ")[0] || "9999");
+          return getYear(a.generation) - getYear(b.generation);
+        });
       }
     }
   });
@@ -126,8 +133,9 @@ const FamilyTree = () => {
   const [familyList, setFamilyList] = useState<FirestoreMember[]>([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [expandedAbout, setExpandedAbout] = useState(false);
 
-  // Form state
+  // form state
   const [showSpouse, setShowSpouse] = useState(false);
   const [alive, setAlive] = useState(false);
   const [spouseAlive, setSpouseAlive] = useState(false);
@@ -142,6 +150,7 @@ const FamilyTree = () => {
     about: "",
   });
 
+  // fetch data
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -179,23 +188,33 @@ const FamilyTree = () => {
   }, []);
 
   const handleMemberClick = (member: FamilyMember) => {
-    // Keep parent in breadcrumb so it stays visible
     setBreadcrumb((prev) => [...prev, member]);
     setSelectedMember(member);
+    setExpandedAbout(false);
   };
 
   const handleBreadcrumbClick = (index: number) => {
     const newBreadcrumb = breadcrumb.slice(0, index + 1);
     setBreadcrumb(newBreadcrumb);
     setSelectedMember(newBreadcrumb[newBreadcrumb.length - 1]);
+    setExpandedAbout(false);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // require parent + name
+    if (!formData.name.trim() || !formData.parent.trim()) {
+      alert("Please provide both a name and select a parent.");
+      return;
+    }
+
     const newMember = {
       name: formData.name,
       birth: formData.birth,
@@ -242,6 +261,23 @@ const FamilyTree = () => {
       </section>
     );
 
+  // shorten "about"
+  const renderAbout = (text?: string) => {
+    if (!text) return null;
+    if (text.length <= 400) return <p>“{text}”</p>;
+    return (
+      <p>
+        “{expandedAbout ? text : text.slice(0, 400) + "..."}”{" "}
+        <button
+          onClick={() => setExpandedAbout(!expandedAbout)}
+          className="text-primary underline ml-1"
+        >
+          {expandedAbout ? "Show less" : "more..."}
+        </button>
+      </p>
+    );
+  };
+
   return (
     <section className="py-20 px-4 bg-card">
       <div className="max-w-6xl mx-auto">
@@ -263,7 +299,10 @@ const FamilyTree = () => {
         <div className="flex items-center gap-1 mb-8 flex-wrap justify-center">
           {breadcrumb.map((member, index) => (
             <div key={member.id} className="flex items-center gap-2">
-              <button onClick={() => handleBreadcrumbClick(index)} className="text-primary hover:underline font-medium">
+              <button
+                onClick={() => handleBreadcrumbClick(index)}
+                className="text-primary hover:underline font-medium"
+              >
                 {member.name}
               </button>
               {index < breadcrumb.length - 1 && (
@@ -276,17 +315,30 @@ const FamilyTree = () => {
         {/* Selected Member */}
         {selectedMember && (
           <div className="flex flex-col items-center space-y-8 animate-fade-in">
-            {/* Parents */}
+            {/* Parents full boxes */}
             {breadcrumb.length > 1 && (
-              <div className="flex items-center gap-4">
-                <Users className="h-5 w-5 text-muted-foreground" />
-                <p className="text-sm italic text-muted-foreground">
-                  Child of {breadcrumb[breadcrumb.length - 2].name}
-                </p>
+              <div className="flex items-center gap-6">
+                <div className="bg-muted text-foreground px-6 py-4 rounded-lg vintage-shadow">
+                  <Users className="h-6 w-6 mx-auto mb-2" />
+                  <p className="font-bold">{breadcrumb[breadcrumb.length - 2].name}</p>
+                  <p className="text-sm opacity-80">{breadcrumb[breadcrumb.length - 2].generation}</p>
+                </div>
+                {breadcrumb[breadcrumb.length - 2].spouse && (
+                  <>
+                    <Heart className="h-6 w-6 text-accent" />
+                    <div className="bg-muted text-foreground px-6 py-4 rounded-lg vintage-shadow">
+                      <Users className="h-6 w-6 mx-auto mb-2" />
+                      <p className="font-bold">{breadcrumb[breadcrumb.length - 2].spouse?.name}</p>
+                      <p className="text-sm opacity-80">
+                        {breadcrumb[breadcrumb.length - 2].spouse?.generation}
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
             )}
 
-            {/* Selected member */}
+            {/* Selected Member */}
             <div className="flex items-center gap-6">
               <div className="bg-primary text-primary-foreground px-6 py-4 rounded-lg vintage-shadow">
                 <Users className="h-6 w-6 mx-auto mb-2" />
@@ -300,18 +352,16 @@ const FamilyTree = () => {
                   <div className="bg-primary text-primary-foreground px-6 py-4 rounded-lg vintage-shadow">
                     <Users className="h-6 w-6 mx-auto mb-2" />
                     <p className="font-bold">{selectedMember.spouse.name}</p>
-                    <p className="text-sm opacity-90">
-                      {selectedMember.spouse.generation}
-                    </p>
+                    <p className="text-sm opacity-90">{selectedMember.spouse.generation}</p>
                   </div>
                 </>
               )}
             </div>
 
-            {/* About section */}
+            {/* About */}
             {selectedMember.information && (
-              <div className="max-w-md text-center text-muted-foreground italic">
-                <p>“{selectedMember.information}”</p>
+              <div className="max-w-2xl text-center text-muted-foreground italic">
+                {renderAbout(selectedMember.information)}
               </div>
             )}
 
@@ -382,7 +432,13 @@ const FamilyTree = () => {
 
                 <div>
                   <Label>Busateri Parent</Label>
-                  <select name="parent" value={formData.parent} onChange={handleInputChange} className="w-full p-2 border rounded">
+                  <select
+                    name="parent"
+                    value={formData.parent}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded"
+                    required
+                  >
                     <option value="">Select parent</option>
                     {familyList.map((f) => (
                       <option key={f.id} value={f.name}>
@@ -405,8 +461,8 @@ const FamilyTree = () => {
                     </div>
 
                     <div>
-                      <Label>Spouse Birthdate (Month / Day / Year)</Label>
-                      <Input name="spouse_birth" placeholder="e.g. 1907" value={formData.spouse_birth} onChange={handleInputChange} />
+                      <Label>Spouse Birthdate</Label>
+                      <Input name="spouse_birth" value={formData.spouse_birth} onChange={handleInputChange} />
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -416,20 +472,19 @@ const FamilyTree = () => {
 
                     {!spouseAlive && (
                       <div>
-                        <Label>Spouse Deathdate (Month / Day / Year)</Label>
-                        <Input name="spouse_death" placeholder="e.g. 1982" value={formData.spouse_death} onChange={handleInputChange} />
+                        <Label>Spouse Deathdate</Label>
+                        <Input name="spouse_death" value={formData.spouse_death} onChange={handleInputChange} />
                       </div>
                     )}
                   </>
                 )}
 
                 <div>
-                  <Label>About Member (max 300 characters)</Label>
+                  <Label>About Member</Label>
                   <Textarea
                     name="about"
                     value={formData.about}
                     onChange={handleInputChange}
-                    maxLength={300}
                     placeholder="Write a short bio or memory..."
                   />
                 </div>
