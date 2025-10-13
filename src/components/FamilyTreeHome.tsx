@@ -1,4 +1,3 @@
-// FamilyTreeHome.tsx
 import { useEffect, useState, useRef, useMemo } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/config";
@@ -10,6 +9,7 @@ import {
 import { Button } from "./ui/button";
 import { FamilyMember, FirestoreMember, normalizeName, buildFamilyTree } from "@/components/FamilyTreeTypes.tsx";
 import AddFamilyForm from "@/components/AddFamilyForm.tsx";
+import EditFamilyMember from "@/components/EditFamilyMember.tsx"; // Added import
 import FullFamilyTree from "@/components/FullFamilyTree.tsx";
 
 // Reusable MemberBox component to reduce JSX repetition
@@ -308,6 +308,13 @@ const FamilyTreeHome = () => {
                       <p>"{ancestor.information}"</p>
                     )}
                   </div>
+                )}
+                {idx === breadcrumb.length - 1 && (
+                  <EditFamilyMember 
+                    member={ancestor} 
+                    onSuccess={refreshTree}
+                    buttonText={`Edit ${ancestor.name.split(" ")[0]}'s Info`} // Dynamic button text
+                  />
                 )}
                 {idx === breadcrumb.length - 1 && ancestor.children && ancestor.children.length > 0 && (
                   <>
