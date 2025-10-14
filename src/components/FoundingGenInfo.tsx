@@ -13,7 +13,10 @@ const FoundingGenInfo = () => {
         </div>
         <div className="prose prose-lg max-w-none text-foreground">
           <p className="mb-4 text-muted-foreground leading-relaxed">
-            Giuseppe (Joseph) and Ninfa Pusateri's journey began in Saint Agnes, Sicily—today known as the seaside town of Sant'Agata di Militello, nestled along Sicily's northern coast in the Metropolitan City of Messina. At the turn of the 20th century, and at only 20 years old, they looked toward America for a better life. Giuseppe (Joseph) left first in 1901, departing from Napoli aboard the S.S. Washington. After weeks aboard a crowded steamship, he arrived at the Port of New York through Ellis Island, with his destination listed as Milwaukee, Wisconsin.
+          Giuseppe (Joseph) and Ninfa “Miceli” Pusateri were both born in Saint Agnes, Sicily—known today as the seaside town of Sant’Agata di Militello, nestled along Sicily’s northern coast in the Metropolitan City of Messina. Giuseppe (Joseph) was the son of Salvatore Pusateri and Grazia “Brusciarella” Pusateri, while Ninfa was born to Biagio Miceli and Teresa “Cancemi” Miceli. The two were married on December 23, 1899, when Giuseppe was 19 and Ninfa 17.
+          </p>
+          <p className="mb-4 text-muted-foreground leading-relaxed">
+          At the dawn of the 20th century, the young couple looked toward America in search of a better life and work opportunities. Giuseppe (Joseph) set out first in 1901, departing from Napoli aboard the S.S. Washington. After enduring several weeks aboard a crowded steamship, he arrived at the Port of New York through Ellis Island, his destination marked as Milwaukee, Wisconsin—a city that would soon become home for generations of their family.
           </p>
           
           <p className="mb-4 text-muted-foreground leading-relaxed">
