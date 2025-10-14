@@ -126,7 +126,6 @@ const AddFamilyForm = ({ familyList, onSuccess }: AddFamilyFormProps) => {
                 placeholder="e.g. 1905"
                 value={formData.birth}
                 onChange={handleInputChange}
-                required
               />
             </div>
 
