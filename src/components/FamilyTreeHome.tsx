@@ -37,13 +37,13 @@ const MemberBox = ({ member, showSpouseAsBox = false, isLarge = false, onClick, 
   
   // Responsive classes for mobile vs desktop
   const boxClass = isLarge 
-    ? `${colorClass} px-4 py-3 md:px-6 md:py-4 rounded-lg vintage-shadow` 
-    : `${colorClass} px-3 py-2 md:px-5 md:py-3 rounded-lg vintage-shadow hover:scale-105 hover:brightness-110 transition-transform`;
+    ? `${colorClass} px-3 py-2 md:px-4 md:py-3 rounded-lg vintage-shadow` 
+    : `${colorClass} px-2 py-1.5 md:px-3 md:py-2 rounded-lg vintage-shadow hover:scale-105 hover:brightness-110 transition-transform`;
   
-  const iconSize = isLarge ? "h-4 w-4 md:h-6 md:w-6" : "h-4 w-4 md:h-5 md:w-5";
-  const nameClass = isLarge ? "font-bold text-sm md:text-base" : "font-semibold text-xs md:text-sm";
-  const genClass = isLarge ? "text-xs md:text-sm opacity-90" : "text-[10px] md:text-xs opacity-80";
-  const heartClass = isLarge ? "h-4 w-4 md:h-6 md:w-6 text-accent animate-pulse" : "h-4 w-4 md:h-5 md:w-5 text-accent";
+  const iconSize = isLarge ? "h-3 w-3 md:h-4 md:w-4" : "h-3 w-3 md:h-4 md:w-4";
+  const nameClass = isLarge ? "font-bold text-xs md:text-sm" : "font-semibold text-[10px] md:text-xs";
+  const genClass = isLarge ? "text-[10px] md:text-xs opacity-90" : "text-[8px] md:text-[10px] opacity-80";
+  const heartClass = isLarge ? "h-3 w-3 md:h-4 md:w-4 text-accent animate-pulse" : "h-3 w-3 md:h-4 md:w-4 text-accent";
 
   return (
     <button onClick={onClick} className="flex flex-col items-center cursor-pointer group animate-fade-in">
@@ -351,7 +351,7 @@ const FamilyTreeHome = () => {
           {generations.map((generation, idx) => (
             <div key={idx} className="mb-8 md:mb-12">
               <h3 className="text-xl md:text-2xl font-semibold text-primary mb-3 md:mb-4 text-center">
-                {idx === 0 ? "Founders" : `Generation ${idx + 1}`}
+                {idx === 0 ? "Generation 1 (Founders)" : `Generation ${idx + 1}`}
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-wrap gap-3 md:gap-6 justify-center px-2">
                 {generation.map((member) => (
