@@ -18,13 +18,27 @@ interface MemberBoxProps {
   showSpouseAsBox?: boolean;
   isLarge?: boolean;
   onClick?: () => void;
+  generationIndex?: number; // Added for color coding
 }
 
-const MemberBox = ({ member, showSpouseAsBox = false, isLarge = false, onClick }: MemberBoxProps) => {
+const MemberBox = ({ member, showSpouseAsBox = false, isLarge = false, onClick, generationIndex = 0 }: MemberBoxProps) => {
+  // Generation colors using theme with subtle variations
+  const generationColors = [
+    "bg-primary text-primary-foreground", // Generation 1 (Founders)
+    "bg-secondary text-secondary-foreground", // Generation 2
+    "bg-accent text-accent-foreground", // Generation 3
+    "bg-primary/70 text-primary-foreground", // Generation 4
+    "bg-secondary/70 text-secondary-foreground", // Generation 5
+    "bg-accent/70 text-accent-foreground", // Generation 6
+    "bg-primary/50 text-primary-foreground", // Generation 7
+  ];
+
+  const colorClass = generationColors[generationIndex % generationColors.length];
+  
   // Responsive classes for mobile vs desktop
   const boxClass = isLarge 
-    ? "bg-primary text-primary-foreground px-4 py-3 md:px-6 md:py-4 rounded-lg vintage-shadow" 
-    : "bg-secondary text-secondary-foreground px-3 py-2 md:px-5 md:py-3 rounded-lg vintage-shadow hover:scale-105 hover:bg-accent hover:text-accent-foreground transition-transform";
+    ? `${colorClass} px-4 py-3 md:px-6 md:py-4 rounded-lg vintage-shadow` 
+    : `${colorClass} px-3 py-2 md:px-5 md:py-3 rounded-lg vintage-shadow hover:scale-105 hover:brightness-110 transition-transform`;
   
   const iconSize = isLarge ? "h-4 w-4 md:h-6 md:w-6" : "h-4 w-4 md:h-5 md:w-5";
   const nameClass = isLarge ? "font-bold text-sm md:text-base" : "font-semibold text-xs md:text-sm";
@@ -288,6 +302,7 @@ const FamilyTreeHome = () => {
                   member={ancestor} 
                   showSpouseAsBox 
                   isLarge 
+                  generationIndex={idx}
                 />
                 {idx === breadcrumb.length - 1 && ancestor.information && (
                   <div className="max-w-md text-center text-muted-foreground italic mt-2 px-4">
@@ -319,7 +334,8 @@ const FamilyTreeHome = () => {
                           key={child.id} 
                           member={child} 
                           showSpouseAsBox={false} 
-                          onClick={() => handleMemberClick(child)} 
+                          onClick={() => handleMemberClick(child)}
+                          generationIndex={idx + 1}
                         />
                       ))}
                     </div>
@@ -344,6 +360,7 @@ const FamilyTreeHome = () => {
                     member={member}
                     showSpouseAsBox={idx === 0}
                     onClick={() => handleMemberClick(member)}
+                    generationIndex={idx}
                   />
                 ))}
               </div>
