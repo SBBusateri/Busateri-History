@@ -219,9 +219,13 @@ const FamilyTreeHome = () => {
     const path = findPathToRoot(member);
     setBreadcrumb(path);
     setSelectedMember(member);
-    if (breadcrumbRef.current) {
-      breadcrumbRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    
+    // Use setTimeout to ensure state updates before scrolling
+    setTimeout(() => {
+      if (breadcrumbRef.current) {
+        breadcrumbRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 50);
   };
 
   const handleBreadcrumbClick = (index: number) => {
@@ -229,7 +233,7 @@ const FamilyTreeHome = () => {
     setBreadcrumb(newBreadcrumb);
     setSelectedMember(newBreadcrumb[newBreadcrumb.length - 1]);
     if (breadcrumbRef.current) {
-      breadcrumbRef.current.scrollIntoView({ behavior: "smooth" });
+      breadcrumbRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
@@ -272,9 +276,9 @@ const FamilyTreeHome = () => {
           </Button>
         </div>
 
-        {/* Breadcrumb Navigation - Compact on mobile */}
-        {breadcrumb.length > 1 && (
-          <div ref={breadcrumbRef}>
+        {/* Breadcrumb Navigation - Always present for scroll target */}
+        <div ref={breadcrumbRef} className="min-h-[2rem]">
+          {breadcrumb.length > 1 && (
             <div className="flex items-center justify-center gap-1 md:gap-2 mb-6 md:mb-8 flex-wrap">
               {breadcrumb.map((ancestor, idx) => (
                 <div key={ancestor.id} className="flex items-center">
@@ -290,8 +294,8 @@ const FamilyTreeHome = () => {
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Selected Member Lineage - Compact spacing on mobile */}
         {selectedMember && breadcrumb.length > 1 && (
@@ -346,14 +350,14 @@ const FamilyTreeHome = () => {
           </div>
         )}
 
-        {/* All Generations Display - Responsive grid for mobile */}
+        {/* All Generations Display - Responsive grid for mobile, centered founders */}
         <div className="mt-8 md:mt-12">
           {generations.map((generation, idx) => (
             <div key={idx} className="mb-8 md:mb-12">
               <h3 className="text-xl md:text-2xl font-semibold text-primary mb-3 md:mb-4 text-center">
                 {idx === 0 ? "Generation 1 (Founders)" : `Generation ${idx + 1}`}
               </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-wrap gap-3 md:gap-6 justify-center px-2">
+              <div className={`${idx === 0 ? 'flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6' : 'grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-wrap gap-3 md:gap-6 justify-center'} px-2`}>
                 {generation.map((member) => (
                   <MemberBox
                     key={member.id}
