@@ -98,12 +98,12 @@ const AddFamilyForm = ({ familyList, onSuccess }: AddFamilyFormProps) => {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Add a New Family Member</DialogTitle>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 pb-4">
             <p className="text-muted-foreground">
               Need to add any more family members? Fill out the form below
               and hit submit when done.

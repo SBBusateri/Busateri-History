@@ -256,8 +256,8 @@ const FoundingGenDocs = () => {
 
       {/* Upload Form Dialog */}
       <Dialog open={showUploadForm} onOpenChange={setShowUploadForm}>
-        <DialogContent className="max-w-lg">
-          <form onSubmit={handleUploadSubmit} className="space-y-4">
+      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+        <form onSubmit={handleUploadSubmit} className="space-y-4 pb-4">
             <h3 className="text-xl font-bold text-primary">Upload a Family Document</h3>
             <p className="text-sm text-muted-foreground">
               Share photos, documents, or records related to the Busateri family history. If the file is too big email it to blakebusateri@gmail.com 
