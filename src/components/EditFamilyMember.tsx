@@ -108,12 +108,12 @@ const EditFamilyMember = ({ member, onSuccess, buttonText = "Edit Member" }: Edi
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
+      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+        <DialogHeader>
             <DialogTitle>Edit {member.name}</DialogTitle>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 pb-4">
             <p className="text-muted-foreground">
               Update missing information or add to the about section.
             </p>
