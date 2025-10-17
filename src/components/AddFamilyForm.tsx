@@ -93,8 +93,10 @@ const AddFamilyForm = ({ familyList, onSuccess }: AddFamilyFormProps) => {
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogTrigger asChild>
-          <Button size="lg" className="gap-2">
-            <Plus className="h-4 w-4" /> Add More Family
+        <Button variant="outline"
+            className="gap-2 text-sm md:text-base">
+            <Plus className="h-4 w-4 md:h-5 md:w-5" />
+            Add More Family
           </Button>
         </DialogTrigger>
 
@@ -110,7 +112,7 @@ const AddFamilyForm = ({ familyList, onSuccess }: AddFamilyFormProps) => {
             </p>
 
             <div>
-              <Label>Full Name of Busateri *</Label>
+              <Label>Full Name of family member *</Label>
               <Input
                 name="name"
                 value={formData.name}

@@ -265,16 +265,19 @@ const FamilyTreeHome = () => {
           Explore all generations or click a family member to view their lineage
         </p>
 
-        <div className="flex justify-center mb-6 md:mb-8">
-          <Button
-            variant="outline"
-            onClick={() => setShowFullTree(true)}
-            className="gap-2 text-sm md:text-base"
-          >
-            <Users className="h-4 w-4 md:h-5 md:w-5" />
-            View Full Family Tree
-          </Button>
-        </div>
+{/* Full Tree and Add Family Buttons - Side by side */}
+<div className="flex flex-wrap justify-center items-center gap-4 mb-8">
+  <Button
+    variant="outline"
+    onClick={() => setShowFullTree(true)}
+    className="gap-2 text-sm md:text-base"
+  >
+    <Users className="h-4 w-4 md:h-5 md:w-5" />
+    View Full Family Tree
+  </Button>
+
+  <AddFamilyForm familyList={familyList} onSuccess={refreshTree} />
+</div>
 
         {/* Breadcrumb Navigation - Always present for scroll target */}
         <div ref={breadcrumbRef} className="min-h-[2rem]">
